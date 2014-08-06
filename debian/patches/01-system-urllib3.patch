@@ -1,0 +1,17 @@
+Description: use system urllib3, like requests do in Debian
+Author: Dimitri John Ledkov <xnox@ubuntu.com>
+
+--- python-wsgi-intercept-0.6.4.orig/wsgi_intercept/requests_intercept.py
++++ python-wsgi-intercept-0.6.4/wsgi_intercept/requests_intercept.py
+@@ -2,9 +2,9 @@
+ """
+ 
+ from . import WSGI_HTTPConnection, WSGI_HTTPSConnection, wsgi_fake_socket
+-from requests.packages.urllib3.connectionpool import (HTTPConnectionPool,
++from urllib3.connectionpool import (HTTPConnectionPool,
+         HTTPSConnectionPool)
+-from requests.packages.urllib3.connection import (HTTPConnection,
++from urllib3.connection import (HTTPConnection,
+         HTTPSConnection)
+ 
+ 

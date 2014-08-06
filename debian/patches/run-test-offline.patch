@@ -1,0 +1,33 @@
+Description: Allow testsuite to succeed without network access (like on launchpad)
+Author: Dimitri John Ledkov <xnox@ubuntu.com>
+
+Index: python-wsgi-intercept/test/test_requests.py
+===================================================================
+--- python-wsgi-intercept.orig/test/test_requests.py	2014-07-31 14:47:46.000000000 +0800
++++ python-wsgi-intercept/test/test_requests.py	2014-07-31 14:47:50.000000000 +0800
+@@ -69,11 +69,21 @@
+ 
+ def test_http_not_intercepted():
+     with InstalledApp(wsgi_app.raises_app, host=HOST, port=80):
+-        resp = requests.get("http://google.com")
+-        assert resp.status_code >= 200 and resp.status_code < 300
++        try:
++            resp = requests.get("http://google.com")
++        except ConnectionError:
++            # No internet connectivity
++            pass
++        else:
++            assert resp.status_code >= 200 and resp.status_code < 300
+ 
+ 
+ def test_https_not_intercepted():
+     with InstalledApp(wsgi_app.raises_app, host=HOST, port=80):
+-        resp = requests.get("https://google.com")
+-        assert resp.status_code >= 200 and resp.status_code < 300
++        try:
++            resp = requests.get("https://google.com")
++        except ConnectionError:
++            # No internet connectivity
++            pass
++        else:
++            assert resp.status_code >= 200 and resp.status_code < 300

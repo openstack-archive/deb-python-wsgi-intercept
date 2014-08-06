@@ -1,0 +1,48 @@
+python-wsgi-intercept (0.8.1-2) unstable; urgency=medium
+
+  * New upstream release.
+  * Switched to github as upstream source, and using tags for orig file.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 06 Aug 2014 14:16:41 +0000
+
+python-wsgi-intercept (0.6.5-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/patches/old-urllib3.patch: skip requests lib tests, if
+    urllib3 is too old.
+  * Bump minimum required python3 version to 3.3.
+  * Fix debian/watch file URL.
+  * Drop patch from 0.6.4-2, included upstream.
+  * Allow testsuite to succeed without network access (like on launchpad)
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Mon, 30 Jun 2014 01:08:21 +0100
+
+python-wsgi-intercept (0.6.4-2) unstable; urgency=medium
+
+  * Apply patch to fix regression since 0.5.1. Values in HTTP headers was
+    not preceded by a single space, as preferred in the RFC. Also it's
+    ugly not to do it, and no-one else deviates from that preference.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 24 Jun 2014 14:47:45 +0100
+
+python-wsgi-intercept (0.6.4-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Update watch file.
+  * Enable python3 build.
+  * Switch to pybuild.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Tue, 24 Jun 2014 12:50:59 +0100
+
+python-wsgi-intercept (0.6.1-1) unstable; urgency=medium
+
+  * New upstream release (Closes: #740720).
+  * Fixed debian/copyright as per FTP masters suggestion.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 01 Nov 2013 14:34:15 +0800
+
+python-wsgi-intercept (0.5.1-1) unstable; urgency=low
+
+  * Initial release. (Closes: #725031)
+
+ -- Thomas Goirand <zigo@debian.org>  Tue, 01 Oct 2013 01:05:06 +0800

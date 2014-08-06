@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+
+export PYBUILD_TEST_PYTEST=1
+export PYBUILD_NAME=wsgi-intercept
+UPSTREAM_GIT = git://github.com/cdent/python3-wsgi-intercept.git
+include /usr/share/openstack-pkg-tools/pkgos.make
+
+%:
+	dh $@ --with python2,python3 --buildsystem=pybuild
+
+override_dh_auto_test:
+	http_proxy= https_proxy= dh_auto_test
+
+override_dh_python3:
+	dh_python3
+	# python3 pyremove is broken ?!
+	rm -rf ./debian/python3-wsgi-intercept/usr/lib/python3/dist-packages/test

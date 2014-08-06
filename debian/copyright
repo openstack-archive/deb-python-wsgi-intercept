@@ -1,0 +1,37 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: wsgi_intercept
+Source: git://github.com/cdent/python3-wsgi-intercept.git
+
+Files: debian/*
+Copyright: (c) 2013, Thomas Goirand <zigo@debian.org>
+License: Expat
+
+Files: wsgi_intercept/webunit_intercept/IMGSucker.py
+Copyright: (c) 2003 Richard Jones (http://mechanicalcat.net/richard)
+           (c) 2002 ekit.com Inc (http://www.ekit-inc.com/)
+           (c) 2001 Bizar Software Pty Ltd (http://www.bizarsoftware.com.au/)
+License: Expat
+
+Files: *
+Copyright: (c) 2013, Kumar McMillan <kumar.mcmillan@gmail.com>
+           (c) 2013, Marc Hedlund <marc@precipice.org>
+License: Expat
+
+License: Expat
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
