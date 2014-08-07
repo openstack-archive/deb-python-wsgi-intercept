@@ -1,4 +1,4 @@
 01-system-urllib3.patch
 old-urllib3.patch
 run-test-offline.patch
-github-issue-24.patch
+del-strict-from-kargs.patch

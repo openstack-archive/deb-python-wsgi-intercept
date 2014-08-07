@@ -1,0 +1,24 @@
+Description: Delete strict from kwargs
+ This patch removes strict from kwargs, as it's not supported in Python 3.4.
+ Full discussion about the bug may be seen here:
+  https://github.com/cdent/python3-wsgi-intercept/issues/24
+Author: Chris Dent <chris.dent@gmail.com>
+Origin: upstream, https://github.com/cdent/python3-wsgi-intercept/issues/24
+Forwarded: not-needed
+Last-Update: 2014-08-07
+
+--- python-wsgi-intercept-0.8.1.orig/wsgi_intercept/__init__.py
++++ python-wsgi-intercept-0.8.1/wsgi_intercept/__init__.py
+@@ -507,6 +507,12 @@ class WSGI_HTTPSConnection(HTTPSConnecti
+     Intercept all traffic to certain hosts & redirect into a WSGI
+     application object.
+     """
++    def __init__(self, *args, **kwargs):
++        if 'strict' in kwargs:
++            del kwargs['strict']
++
++        HTTPSConnection.__init__(self, *args, **kwargs)
++
+     def get_app(self, host, port):
+         """
+         Return the app object for the given (host, port).
