@@ -11,6 +11,7 @@ python-wsgi-intercept (0.8.1-1) unstable; urgency=medium
   * Switched to github as upstream source, and using tags for orig file.
   * Adds patch from upstream bug tracker to fix issue with requests
     vendorized urllib3 that doesn't work the same way as what is in Debian.
+    Thanks a lot to upstream author for help! (Closes: #755315).
 
  -- Thomas Goirand <zigo@debian.org>  Wed, 06 Aug 2014 14:16:41 +0000
 
