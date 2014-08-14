@@ -1,3 +1,10 @@
+python-wsgi-intercept (0.8.1-2) unstable; urgency=medium
+
+  * Removed unit tests which are doing outbound network connection to google.
+    Thanks to Matthias Klose <doko@ubuntu.com> for the report (Closes: #758020)
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 14 Aug 2014 15:17:49 +0800
+
 python-wsgi-intercept (0.8.1-1) unstable; urgency=medium
 
   * New upstream release.

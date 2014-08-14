@@ -1,4 +1,4 @@
 01-system-urllib3.patch
 05-old-urllib3.patch
-10-run-test-offline.patch
 15-del-strict-from-kargs.patch
+25-do-not-run-internet-needing-tests.patch
