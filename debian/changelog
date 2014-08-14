@@ -1,9 +1,9 @@
 python-wsgi-intercept (0.8.1-2) unstable; urgency=medium
 
-  * Disabled test_http_not_intercepted unit tests which is doing some network
-    access during the tests (Closes: #758020).
+  * Removed unit tests which are doing outbound network connection to google.
+    Thanks to Matthias Klose <doko@ubuntu.com> for the report (Closes: #758020)
 
- -- Thomas Goirand <zigo@debian.org>  Thu, 14 Aug 2014 06:28:27 +0000
+ -- Thomas Goirand <zigo@debian.org>  Thu, 14 Aug 2014 15:17:49 +0800
 
 python-wsgi-intercept (0.8.1-1) unstable; urgency=medium
 

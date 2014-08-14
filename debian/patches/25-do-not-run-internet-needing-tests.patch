@@ -1,0 +1,50 @@
+Description: Remove network-accessing tests
+ The package is, during its unit tests, trying to connect to google using both
+ http and https. This patch simply removes these tests.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: not-needed
+Last-Update: 2014-08-14
+
+--- python-wsgi-intercept-0.8.1.orig/test/test_http_client.py
++++ python-wsgi-intercept-0.8.1/test/test_http_client.py
+@@ -49,22 +49,3 @@ def test_app_error():
+             http_client.request('GET', '/')
+             http_client.getresponse().read()
+         http_client.close()
+-
+-
+-def test_http_not_intercepted():
+-    with InstalledApp(wsgi_app.raises_app, host=HOST, port=80) as app:
+-        http_client = http_lib.HTTPConnection('google.com')
+-        http_client.request('GET', '/')
+-        response = http_client.getresponse()
+-        http_client.close()
+-        assert 200 <= int(response.status) < 400
+-
+-
+-@py.test.mark.xfail()
+-def test_https_not_intercepted():
+-    with InstalledApp(wsgi_app.raises_app, host=HOST, port=443):
+-        http_client = http_lib.HTTPSConnection('google.com')
+-        http_client.request('GET', '/')
+-        response = http_client.getresponse()
+-        http_client.close()
+-        assert 200 <= int(response.status) < 400
+--- python-wsgi-intercept-0.8.1.orig/test/test_requests.py	2014-08-14 15:55:29.000000000 +0800
++++ python-wsgi-intercept-0.8.1/test/test_requests.py	2014-08-14 15:55:33.000000000 +0800
+@@ -65,15 +65,3 @@
+     with InstalledApp(wsgi_app.raises_app, host=HOST, port=80):
+         with py.test.raises(WSGIAppError):
+             requests.get('http://some_hopefully_nonexistant_domain/')
+-
+-
+-def test_http_not_intercepted():
+-    with InstalledApp(wsgi_app.raises_app, host=HOST, port=80):
+-        resp = requests.get("http://google.com")
+-        assert resp.status_code >= 200 and resp.status_code < 300
+-
+-
+-def test_https_not_intercepted():
+-    with InstalledApp(wsgi_app.raises_app, host=HOST, port=80):
+-        resp = requests.get("https://google.com")
+-        assert resp.status_code >= 200 and resp.status_code < 300
