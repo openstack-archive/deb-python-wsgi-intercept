@@ -1,9 +1,10 @@
-python-wsgi-intercept (0.8.1-3) UNRELEASED; urgency=medium
+python-wsgi-intercept (0.8.1-3) unstable; urgency=medium
 
+  * Team upload.
   * d/p/01-system-urllib3.patch: Dropped, resolving FTBFS; requests now
-    DTRT with regards to using system Python modules.
+    DTRT with regards to using system Python modules (Closes: #792161).
 
- -- James Page <james.page@ubuntu.com>  Fri, 10 Jul 2015 16:22:08 +0100
+ -- James Page <james.page@ubuntu.com>  Fri, 10 Jul 2015 16:25:27 +0100
 
 python-wsgi-intercept (0.8.1-2) unstable; urgency=medium
 
