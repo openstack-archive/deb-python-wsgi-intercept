@@ -1,3 +1,9 @@
+python-wsgi-intercept (1.1.0-1) experimental; urgency=medium
+
+  * New upstream release.
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 25 Jan 2016 12:49:48 +0000
+
 python-wsgi-intercept (0.8.1-3) unstable; urgency=medium
 
   * Team upload.
