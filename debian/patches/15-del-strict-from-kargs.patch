@@ -7,9 +7,11 @@ Origin: upstream, https://github.com/cdent/python3-wsgi-intercept/issues/24
 Forwarded: not-needed
 Last-Update: 2014-08-07
 
---- python-wsgi-intercept-0.8.1.orig/wsgi_intercept/__init__.py
-+++ python-wsgi-intercept-0.8.1/wsgi_intercept/__init__.py
-@@ -507,6 +507,12 @@ class WSGI_HTTPSConnection(HTTPSConnecti
+Index: python-wsgi-intercept/wsgi_intercept/__init__.py
+===================================================================
+--- python-wsgi-intercept.orig/wsgi_intercept/__init__.py
++++ python-wsgi-intercept/wsgi_intercept/__init__.py
+@@ -505,6 +505,12 @@ class WSGI_HTTPConnection(HTTPConnection
      Intercept all traffic to certain hosts & redirect into a WSGI
      application object.
      """

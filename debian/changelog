@@ -4,6 +4,7 @@ python-wsgi-intercept (1.1.0-1) experimental; urgency=medium
   * Fixed (build-)depends for this release.
   * Bumped Standards-Version to 3.9.6.
   * Fixed debian/copyright.
+  * Rebased 25-do-not-run-internet-needing-tests.patch.
 
  -- Thomas Goirand <zigo@debian.org>  Mon, 25 Jan 2016 12:49:48 +0000
 

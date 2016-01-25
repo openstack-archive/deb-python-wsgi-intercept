@@ -3,9 +3,10 @@ Author: Dimitri John Ledkov <xnox@ubuntu.com>
 
 Index: python-wsgi-intercept/test/test_requests.py
 ===================================================================
---- python-wsgi-intercept.orig/test/test_requests.py	2014-07-30 17:41:45.000000000 +0800
-+++ python-wsgi-intercept/test/test_requests.py	2014-07-31 14:47:46.000000000 +0800
-@@ -1,5 +1,10 @@
+--- python-wsgi-intercept.orig/test/test_requests.py
++++ python-wsgi-intercept/test/test_requests.py
+@@ -1,6 +1,11 @@
+ import os
  import py.test
 -from wsgi_intercept import requests_intercept, WSGIAppError
 +
@@ -17,7 +18,7 @@ Index: python-wsgi-intercept/test/test_requests.py
  from test import wsgi_app
  from test.install import installer_class
  import requests
-@@ -7,8 +12,12 @@
+@@ -8,8 +13,12 @@ from requests.exceptions import Connecti
  
  HOST = 'some_hopefully_nonexistant_domain'
  
