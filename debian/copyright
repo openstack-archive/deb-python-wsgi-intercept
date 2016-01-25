@@ -2,19 +2,21 @@ Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: wsgi_intercept
 Source: git://github.com/cdent/python3-wsgi-intercept.git
 
+Files: *
+Copyright: (c) 2013, Kumar McMillan <kumar.mcmillan@gmail.com>
+           (c) 2013, Marc Hedlund <marc@precipice.org>
+License: Expat
+
 Files: debian/*
-Copyright: (c) 2013, Thomas Goirand <zigo@debian.org>
+Copyright: (c) 2013-2016, Thomas Goirand <zigo@debian.org>
+           (c) 2014, Dimitri John Ledkov <xnox@ubuntu.com>
+           (c) 2015, James Page <james.page@ubuntu.com>
 License: Expat
 
 Files: wsgi_intercept/webunit_intercept/IMGSucker.py
 Copyright: (c) 2003 Richard Jones (http://mechanicalcat.net/richard)
            (c) 2002 ekit.com Inc (http://www.ekit-inc.com/)
            (c) 2001 Bizar Software Pty Ltd (http://www.bizarsoftware.com.au/)
-License: Expat
-
-Files: *
-Copyright: (c) 2013, Kumar McMillan <kumar.mcmillan@gmail.com>
-           (c) 2013, Marc Hedlund <marc@precipice.org>
 License: Expat
 
 License: Expat
