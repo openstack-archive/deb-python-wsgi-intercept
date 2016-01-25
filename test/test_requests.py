@@ -1,3 +1,4 @@
+import os
 import py.test
 from wsgi_intercept import requests_intercept, WSGIAppError
 from test import wsgi_app
@@ -29,6 +30,8 @@ def test_http_other_port():
         resp = requests.get('http://some_hopefully_nonexistant_domain:8080/')
         assert resp.content == b'WSGI intercept successful!\n'
         assert app.success()
+        environ = app.get_internals()
+        assert environ['wsgi.url_scheme'] == 'http'
 
 
 def test_bogus_domain():
@@ -36,6 +39,18 @@ def test_bogus_domain():
         py.test.raises(
             ConnectionError,
             'requests.get("http://_nonexistant_domain_")')
+
+
+def test_proxy_handling():
+    with py.test.raises(RuntimeError) as exc:
+        with InstalledApp(wsgi_app.simple_app, host=HOST, port=80,
+                          proxy='some_proxy.com:1234'):
+            requests.get('http://some_hopefully_nonexistant_domain:80/')
+    assert 'http_proxy or https_proxy set in environment' in str(exc.value)
+    # We need to do this by hand because the exception was raised
+    # during the entry of the context manager, so the exit handler
+    # wasn't reached.
+    del os.environ['http_proxy']
 
 
 def test_https():
@@ -50,6 +65,8 @@ def test_https_default_port():
         resp = requests.get('https://some_hopefully_nonexistant_domain/')
         assert resp.content == b'WSGI intercept successful!\n'
         assert app.success()
+        environ = app.get_internals()
+        assert environ['wsgi.url_scheme'] == 'https'
 
 
 def test_app_error():

@@ -1,5 +1,9 @@
-"""Intercept HTTP connections that use urllib.request (Py3) aka urllib2 (Python 2).
+"""Intercept HTTP connections that use urllib.request (Python 3)
+aka urllib2 (Python 2).
 """
+
+import os
+
 try:
     import urllib.request as url_lib
 except ImportError:
@@ -27,6 +31,9 @@ class WSGI_HTTPSHandler(url_lib.HTTPSHandler):
 
 
 def install_opener():
+    if 'http_proxy' in os.environ or 'https_proxy' in os.environ:
+        raise RuntimeError(
+            'http_proxy or https_proxy set in environment, please unset')
     handlers = [WSGI_HTTPHandler()]
     if WSGI_HTTPSHandler is not None:
         handlers.append(WSGI_HTTPSHandler())
@@ -38,3 +45,7 @@ def install_opener():
 
 def uninstall_opener():
     url_lib.install_opener(None)
+
+
+install = install_opener
+uninstall = uninstall_opener

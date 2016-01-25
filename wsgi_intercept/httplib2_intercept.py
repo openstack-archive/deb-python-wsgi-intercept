@@ -1,4 +1,5 @@
-"""Intercept HTTP connections that use `httplib2 <https://github.com/jcgregorio/httplib2>`_.
+"""Intercept HTTP connections that use
+`httplib2 <https://github.com/jcgregorio/httplib2>`_.
 """
 
 import sys
@@ -20,12 +21,8 @@ class HTTP_WSGIInterceptorWithTimeout(HTTPInterceptorMixin,
 
         # In Python3 strict is deprecated
         if sys.version_info[0] < 3:
-            try:
-                HTTPConnection.__init__(self, host, port=port, strict=strict,
-                        timeout=timeout, source_address=source_address)
-            except TypeError:  # Python 2.6 doesn't have source_address
-                HTTPConnection.__init__(self, host, port=port, strict=strict,
-                        timeout=timeout)
+            HTTPConnection.__init__(self, host, port=port, strict=strict,
+                    timeout=timeout, source_address=source_address)
         else:
             HTTPConnection.__init__(self, host, port=port,
                     timeout=timeout, source_address=source_address)
@@ -40,12 +37,8 @@ class HTTPS_WSGIInterceptorWithTimeout(HTTPSInterceptorMixin,
         # ignore proxy_info and ca_certs
         # In Python3 strict is deprecated
         if sys.version_info[0] < 3:
-            try:
-                HTTPSConnection.__init__(self, host, port=port, strict=strict,
-                        timeout=timeout, source_address=source_address)
-            except TypeError:  # Python 2.6 doesn't have source_address
-                HTTPSConnection.__init__(self, host, port=port, strict=strict,
-                        timeout=timeout)
+            HTTPSConnection.__init__(self, host, port=port, strict=strict,
+                    timeout=timeout, source_address=source_address)
         else:
             HTTPSConnection.__init__(self, host, port=port,
                     timeout=timeout, source_address=source_address)

@@ -1,5 +1,9 @@
-"""Intercept HTTP connections that use `requests <http://docs.python-requests.org/en/latest/>`_.
+"""Intercept HTTP connections that use
+`requests <http://docs.python-requests.org/en/latest/>`_.
 """
+
+import os
+import sys
 
 from . import WSGI_HTTPConnection, WSGI_HTTPSConnection, wsgi_fake_socket
 from requests.packages.urllib3.connectionpool import (HTTPConnectionPool,
@@ -12,14 +16,27 @@ wsgi_fake_socket.settimeout = lambda self, timeout: None
 
 
 class HTTP_WSGIInterceptor(WSGI_HTTPConnection, HTTPConnection):
-    pass
+    def __init__(self, *args, **kwargs):
+        if 'strict' in kwargs and sys.version_info > (3, 0):
+            kwargs.pop('strict')
+        WSGI_HTTPConnection.__init__(self, *args, **kwargs)
+        HTTPConnection.__init__(self, *args, **kwargs)
 
 
 class HTTPS_WSGIInterceptor(WSGI_HTTPSConnection, HTTPSConnection):
-    pass
+    is_verified = True
+
+    def __init__(self, *args, **kwargs):
+        if 'strict' in kwargs and sys.version_info > (3, 0):
+            kwargs.pop('strict')
+        WSGI_HTTPSConnection.__init__(self, *args, **kwargs)
+        HTTPSConnection.__init__(self, *args, **kwargs)
 
 
 def install():
+    if 'http_proxy' in os.environ or 'https_proxy' in os.environ:
+        raise RuntimeError(
+            'http_proxy or https_proxy set in environment, please unset')
     HTTPConnectionPool.ConnectionCls = HTTP_WSGIInterceptor
     HTTPSConnectionPool.ConnectionCls = HTTPS_WSGIInterceptor
 

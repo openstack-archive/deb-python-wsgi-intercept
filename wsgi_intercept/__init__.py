@@ -1,5 +1,5 @@
 
-"""installs a WSGI application in place of a real URI for testing.
+"""Installs a WSGI application in place of a real host for testing.
 
 Introduction
 ============
@@ -20,12 +20,40 @@ redirects specific server/port combinations into a WSGI application by
 emulating a socket. If no intercept is registered for the host and port
 requested, those requests are passed on to the standard handler.
 
-The functions ``add_wsgi_intercept(host, port, app_create_fn,
-script_name='')`` and ``remove_wsgi_intercept(host,port)`` specify
-which URLs should be redirect into what applications. Note especially
-that ``app_create_fn`` is a *function object* returning a WSGI
+The easiest way to use an intercept is to import an appropriate subclass
+of ``~wsgi_intercept.interceptor.Interceptor`` and use that as a
+context manager over web requests that use the library associated with
+the subclass. For example::
+
+    import httplib2
+    from wsgi_intercept.intercept import Httplib2Interceptor
+    from mywsgiapp import app
+
+    def load_app():
+        return app
+
+    http = httplib2.Http()
+    with Httplib2Interceptor(load_app, host='example.com', port=80) as url:
+        response, content = http.request('%s%s' % (url, '/path'))
+        assert response.status == 200
+
+The interceptor class may aslo be used directly to install intercepts.
+See the module documentation for more information.
+
+Older versions required that the functions ``add_wsgi_intercept(host,
+port, app_create_fn, script_name='')`` and ``remove_wsgi_intercept(host,port)``
+be used to specify which URLs should be redirected into what applications.
+These methods are still available, but the ``Interceptor`` classes are likely
+easier to use for most use cases.
+
+Note especially that ``app_create_fn`` is a *function object* returning a WSGI
 application; ``script_name`` becomes ``SCRIPT_NAME`` in the WSGI app's
 environment, if set.
+
+Note also that if ``http_proxy`` or ``https_proxy`` is set in the environment
+this can cause difficulties with some of the intercepted libraries. If
+requests or urllib is being used, these will raise an exception if one of
+those variables is set.
 
 Install
 =======
@@ -53,7 +81,7 @@ The best way to figure out how to use interception is to inspect
 `the tests`_. More comprehensive documentation available upon
 request.
 
-.. _the tests: https://github.com/cdent/python3-wsgi-intercept/tree/master/test
+.. _the tests: https://github.com/cdent/wsgi-intercept/tree/master/test
 
 
 History
@@ -68,7 +96,7 @@ it into all of the *other* Python Web testing frameworks.
 The Python 2 version of wsgi-intercept was the result. Kumar McMillan
 later took over maintenance.
 
-The current version works with Python 2.6, 2.7, 3.3 and 3.4 and was assembled
+The current version works with Python 2.7, 3.3, 3.4 and 3.5 and was assembled
 by `Chris Dent`_. Testing and documentation improvements from `Sasha Hart`_.
 
 .. _twill: http://www.idyll.org/~t/www-tools/twill.html
@@ -86,13 +114,13 @@ failing tests, et cetera using the Issue Tracker.
 
 Additional documentation is available on `Read The Docs`_.
 
-.. _GitHub: http://github.com/cdent/python3-wsgi-intercept
+.. _GitHub: http://github.com/cdent/wsgi-intercept
 .. _Read The Docs: http://wsgi-intercept.readthedocs.org/en/latest/
 
 """
 from __future__ import print_function
 
-__version__ = '0.8.1'
+__version__ = '1.1.0'
 
 
 import sys
@@ -105,6 +133,11 @@ try:
     from io import BytesIO
 except ImportError:
     from StringIO import StringIO as BytesIO
+
+try:
+    from urllib.parse import unquote_to_bytes as url_unquote
+except ImportError:
+    from urllib import unquote as url_unquote
 
 import traceback
 
@@ -217,6 +250,11 @@ def make_environ(inp, host, port, script_name):
 
     method, url, protocol = method_line.split(' ')
 
+    # Store the URI as requested by the user, without modification
+    # so that PATH_INFO munging can be corrected.
+    environ['REQUEST_URI'] = url
+    environ['RAW_URI'] = url
+
     # clean the script_name off of the url, if it's there.
     if not url.startswith(script_name):
         script_name = ''                # @CTB what to do -- bad URL.  scrap?
@@ -224,7 +262,7 @@ def make_environ(inp, host, port, script_name):
         url = url[len(script_name):]
 
     url = url.split('?', 1)
-    path_info = url[0]
+    path_info = url_unquote(url[0])
     query_string = ""
     if len(url) == 2:
         query_string = url[1]
@@ -239,6 +277,14 @@ def make_environ(inp, host, port, script_name):
     #
     # fill out our dictionary.
     #
+
+    # In Python3 turn the bytes of the path info into a string of
+    # latin-1 code points, because that's what the spec says we must
+    # do to be like a server. Later various libraries will be forced
+    # to decode and then reencode to get the UTF-8 that everyone
+    # wants.
+    if sys.version_info[0] > 2:
+        path_info = path_info.decode('latin-1')
 
     environ.update({
         "wsgi.version": (1, 0),
@@ -326,7 +372,7 @@ class wsgi_fake_socket:
         data has been sent to the socket by the request class;
      2. non-persistent (i.e. non-HTTP/1.1) connections.
     """
-    def __init__(self, app, host, port, script_name):
+    def __init__(self, app, host, port, script_name, https=False):
         self.app = app                  # WSGI app object
         self.host = host
         self.port = port
@@ -336,6 +382,7 @@ class wsgi_fake_socket:
         self.write_results = []          # results from the 'write_fn'
         self.results = None             # results from running the app
         self.output = BytesIO()        # all output from the app, incl headers
+        self.https = https
 
     def makefile(self, *args, **kwargs):
         """
@@ -349,32 +396,19 @@ class wsgi_fake_socket:
           3. build an environment dict out of the traffic in inp;
           4. run the WSGI app & grab the result object;
           5. concatenate & return the result(s) read from the result object.
-
-        @CTB: 'start_response' should return a function that writes
-        directly to self.result, too.
         """
 
         # dynamically construct the start_response function for no good reason.
 
+        self.headers = []
+
         def start_response(status, headers, exc_info=None):
             # construct the HTTP request.
             self.output.write(b"HTTP/1.0 " + status.encode('utf-8') + b"\n")
-
-            for k, v in headers:
-                try:
-                    k = k.encode('utf-8')
-                except AttributeError:
-                    pass
-                try:
-                    v = v.encode('utf-8')
-                except AttributeError:
-                    pass
-                self.output.write(k + b': ' + v + b"\n")
-            self.output.write(b'\n')
-
-            def write_fn(s):
-                self.write_results.append(s)
-            return write_fn
+            # Keep the reference of the headers list to write them only
+            # when the whole application have been processed
+            self.headers = headers
+            return self.write_results.append
 
         # construct the wsgi.input file from everything that's been
         # written to this "socket".
@@ -382,6 +416,8 @@ class wsgi_fake_socket:
 
         # build the environ dictionary.
         environ = make_environ(inp, self.host, self.port, self.script_name)
+        if self.https:
+            environ['wsgi.url_scheme'] = 'https'
 
         # run the application.
         try:
@@ -389,6 +425,20 @@ class wsgi_fake_socket:
         except Exception as error:
             raise WSGIAppError(error, sys.exc_info())
         self.result = iter(app_result)
+
+        # send the headers
+
+        for k, v in self.headers:
+            try:
+                k = k.encode('utf-8')
+            except AttributeError:
+                pass
+            try:
+                v = v.encode('utf-8')
+            except AttributeError:
+                pass
+            self.output.write(k + b': ' + v + b"\n")
+        self.output.write(b'\n')
 
         ###
 
@@ -539,8 +589,28 @@ class WSGI_HTTPSConnection(HTTPSConnection, WSGI_HTTPConnection):
                     sys.stderr.write('INTERCEPTING call to %s:%s\n' %
                                      (self.host, self.port,))
                 self.sock = wsgi_fake_socket(app, self.host, self.port,
-                                             script_name)
+                                             script_name, https=True)
             else:
+                try:
+                    import ssl
+                    if not hasattr(self, 'key_file'):
+                        self.key_file = None
+                    if not hasattr(self, 'cert_file'):
+                        self.cert_file = None
+                    if not hasattr(self, '_context'):
+                        try:
+                            self._context = ssl.create_default_context()
+                        except AttributeError:
+                            self._context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+                            self._context.options |= ssl.OP_NO_SSLv2
+                            if not hasattr(self, 'check_hostname'):
+                                self._check_hostname = (
+                                    self._context.verify_mode != ssl.CERT_NONE
+                                )
+                            else:
+                                self._check_hostname = self.check_hostname
+                except (ImportError, AttributeError):
+                    pass
                 HTTPSConnection.connect(self)
 
         except Exception:

@@ -8,11 +8,11 @@ Intended Audience :: Developers
 License :: OSI Approved :: MIT License
 Operating System :: OS Independent
 Programming Language :: Python :: 2
-Programming Language :: Python :: 2.6
 Programming Language :: Python :: 2.7
 Programming Language :: Python :: 3
 Programming Language :: Python :: 3.3
 Programming Language :: Python :: 3.4
+Programming Language :: Python :: 3.5
 Topic :: Internet :: WWW/HTTP :: WSGI
 Topic :: Software Development :: Testing
 """.strip().splitlines()
@@ -30,6 +30,9 @@ META = {
     'license': 'MIT License',
     'classifiers': CLASSIFIERS,
     'packages': find_packages(),
+    'install_requires': [
+        'six',
+    ],
     'extras_require': {
         'testing': [
             'pytest>=2.4',
