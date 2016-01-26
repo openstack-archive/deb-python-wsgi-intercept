@@ -1,17 +1,35 @@
 #!/usr/bin/make -f
 
-export PYBUILD_TEST_PYTEST=1
-export PYBUILD_NAME=wsgi-intercept
+PYTHONS:=$(shell pyversions -vr)
+PYTHON3S:=$(shell py3versions -vr)
+
 UPSTREAM_GIT = git://github.com/cdent/python3-wsgi-intercept.git
 include /usr/share/openstack-pkg-tools/pkgos.make
 
 %:
-	dh $@ --with python2,python3 --buildsystem=pybuild
+	dh $@ --buildsystem=python_distutils --with python2,python3
+
+override_dh_auto_install:
+	set -e ; for pyvers in $(PYTHONS); do \
+		python$$pyvers setup.py install --install-layout=deb \
+			--root $(CURDIR)/debian/python-wsgi-intercept; \
+	done
+	set -e ; for pyvers in $(PYTHON3S); do \
+		python$$pyvers setup.py install --install-layout=deb \
+			--root $(CURDIR)/debian/python3-wsgi-intercept; \
+	done
+	rm -f $(CURDIR)/debian/python*/usr/lib/python*/dist-packages/*.pth
 
 override_dh_auto_test:
-	http_proxy= https_proxy= dh_auto_test
+ifeq (,$(findstring nocheck, $(DEB_BUILD_OPTIONS)))
+	set -e ; set -x ; for i in 2.7 $(PYTHON3S) ; do \
+		PYMAJOR=`echo $$i | cut -d'.' -f1` ; \
+		echo "===> Testing with python$$i (python$$PYMAJOR)" ; \
+		PYTHON=$$i PYTHONPATH=. python -m pytest ; \
+	done
+endif
 
 override_dh_python3:
-	dh_python3
+	dh_python3 --shebang=/usr/bin/python3
 	# python3 pyremove is broken ?!
 	rm -rf ./debian/python3-wsgi-intercept/usr/lib/python3/dist-packages/test
