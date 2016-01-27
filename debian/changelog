@@ -6,6 +6,7 @@ python-wsgi-intercept (1.1.2-1) experimental; urgency=medium
   * Fixed debian/copyright.
   * Rebased 25-do-not-run-internet-needing-tests.patch.
   * Get away from pybuild, as we don't want http_proxy / https_proxy being set.
+  * Watch file using github tag.
 
  -- Thomas Goirand <zigo@debian.org>  Mon, 25 Jan 2016 12:49:48 +0000
 
