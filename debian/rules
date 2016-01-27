@@ -22,11 +22,14 @@ override_dh_auto_install:
 
 override_dh_auto_test:
 ifeq (,$(findstring nocheck, $(DEB_BUILD_OPTIONS)))
-	set -e ; set -x ; for i in 2.7 $(PYTHON3S) ; do \
-		PYMAJOR=`echo $$i | cut -d'.' -f1` ; \
-		echo "===> Testing with python$$i (python$$PYMAJOR)" ; \
-		PYTHON=$$i PYTHONPATH=. python -m pytest test ; \
-	done
+	rm -rf $(CURDIR)/debian/tmp
+	python2.7 setup.py install --install-layout=deb --root $(CURDIR)/debian/tmp
+	PYTHONPATH=$(CURDIR)/debian/tmp/usr/lib/python2.7/dist-packages PYTHON=python2.7 python -m pytest test
+#	set -e ; set -x ; for i in 2.7 $(PYTHON3S) ; do \
+#		PYMAJOR=`echo $$i | cut -d'.' -f1` ; \
+#		echo "===> Testing with python$$i (python$$PYMAJOR)" ; \
+#		PYTHON=$$i PYTHONPATH=. python -m pytest test ; \
+#	done
 endif
 
 override_dh_python3:
