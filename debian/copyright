@@ -13,12 +13,6 @@ Copyright: (c) 2013-2016, Thomas Goirand <zigo@debian.org>
            (c) 2015, James Page <james.page@ubuntu.com>
 License: Expat
 
-Files: wsgi_intercept/webunit_intercept/IMGSucker.py
-Copyright: (c) 2003 Richard Jones (http://mechanicalcat.net/richard)
-           (c) 2002 ekit.com Inc (http://www.ekit-inc.com/)
-           (c) 2001 Bizar Software Pty Ltd (http://www.bizarsoftware.com.au/)
-License: Expat
-
 License: Expat
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
