@@ -23,7 +23,7 @@ Build-Depends-Indep: python-httplib2,
 Standards-Version: 3.9.6
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-wsgi-intercept.git
 Vcs-Git: git://anonscm.debian.org/openstack/python-wsgi-intercept.git
-Homepage: http://code.google.com/p/wsgi-intercept/
+Homepage: https://github.com/cdent/wsgi-intercept
 
 Package: python-wsgi-intercept
 Architecture: all
