@@ -1,3 +1,9 @@
+python-wsgi-intercept (1.1.2-2) UNRELEASED; urgency=medium
+
+  * Fixed VCS URLs (https).
+
+ -- Ondřej Nový <novy@ondrej.org>  Sun, 28 Feb 2016 15:53:05 +0100
+
 python-wsgi-intercept (1.1.2-1) experimental; urgency=medium
 
   * New upstream release.
