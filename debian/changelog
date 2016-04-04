@@ -1,8 +1,12 @@
-python-wsgi-intercept (1.1.2-2) UNRELEASED; urgency=medium
+python-wsgi-intercept (1.1.2-2) unstable; urgency=medium
 
+  [ Ondřej Nový ]
   * Fixed VCS URLs (https).
 
- -- Ondřej Nový <novy@ondrej.org>  Sun, 28 Feb 2016 15:53:05 +0100
+  [ Thomas Goirand ]
+  * Uploading to unstable.
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 04 Apr 2016 17:19:51 +0000
 
 python-wsgi-intercept (1.1.2-1) experimental; urgency=medium
 
