@@ -5,6 +5,7 @@ python-wsgi-intercept (1.1.2-2) unstable; urgency=medium
 
   [ Thomas Goirand ]
   * Uploading to unstable.
+  * Standards-Version: 3.9.7 (no change).
 
  -- Thomas Goirand <zigo@debian.org>  Mon, 04 Apr 2016 17:19:51 +0000
 
