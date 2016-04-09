@@ -1,3 +1,9 @@
+python-wsgi-intercept (1.1.2-3) UNRELEASED; urgency=medium
+
+  * Standards-Version is 3.9.8 now (no change)
+
+ -- Ondřej Nový <novy@ondrej.org>  Sat, 09 Apr 2016 19:31:44 +0200
+
 python-wsgi-intercept (1.1.2-2) unstable; urgency=medium
 
   [ Ondřej Nový ]
