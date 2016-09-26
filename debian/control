@@ -21,8 +21,8 @@ Build-Depends-Indep: python-httplib2,
                      python3-six,
                      python3-urllib3,
 Standards-Version: 3.9.8
-Vcs-Browser: https://anonscm.debian.org/cgit/openstack/python-wsgi-intercept.git/
-Vcs-Git: https://anonscm.debian.org/git/openstack/python-wsgi-intercept.git
+Vcs-Browser: https://git.openstack.org/cgit/openstack/deb-python-wsgi-intercept?h=debian%2Fnewton
+Vcs-Git: https://git.openstack.org/openstack/deb-python-wsgi-intercept -b debian/newton
 Homepage: https://github.com/cdent/wsgi-intercept
 
 Package: python-wsgi-intercept
