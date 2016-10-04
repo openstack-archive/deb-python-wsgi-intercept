@@ -1,4 +1,4 @@
-python-wsgi-intercept (1.1.2-3) UNRELEASED; urgency=medium
+python-wsgi-intercept (1.1.2-3) unstable; urgency=medium
 
   * Standards-Version is 3.9.8 now (no change)
   * d/rules: Changed UPSTREAM_GIT protocol to https
