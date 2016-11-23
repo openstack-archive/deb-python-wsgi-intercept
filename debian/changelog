@@ -1,3 +1,9 @@
+python-wsgi-intercept (1.1.2-4) UNRELEASED; urgency=medium
+
+  * Bumped debhelper compat version to 10
+
+ -- Ondřej Nový <onovy@debian.org>  Thu, 24 Nov 2016 00:12:32 +0100
+
 python-wsgi-intercept (1.1.2-3) unstable; urgency=medium
 
   * Standards-Version is 3.9.8 now (no change)
